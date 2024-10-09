@@ -47,10 +47,10 @@ public class Test : Scene
     {
         base.Update();
 
-        if (Input.IsMouseButtonReleased(MouseButton.Left) && Physics.Raycast(out Entity hit))
+        /*if (Input.IsMouseButtonReleased(MouseButton.Left) && Physics.Raycast(out Entity hit))
         {
             SelectingManager.SelectedEntity = hit;
             Logger.Info($"Entity ID: {hit.Id}");
-        }
+        }*/
     }
 }

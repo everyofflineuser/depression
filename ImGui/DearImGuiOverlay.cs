@@ -19,21 +19,6 @@ public class DearImGuiOverlay : Overlay
         CopperImGui.ShowDearImGuiMetricsWindow = false;
         CopperImGui.ShowDearImGuiDebugLogWindow = false;
         CopperImGui.ShowDearImGuiIdStackToolWindow = false;
-
-        (string, Action)[] MenuActions = new (string, Action)[]
-        {
-            new ValueTuple<string, Action>("Project", () =>
-            {
-                CopperImGui.MenuItem("New", () => Logger.Info("New Project"));
-                CopperImGui.MenuItem("Open", () => Logger.Info(ProjectManager.OpenExistProject()!));
-                CopperImGui.MenuItem("Save", () => Logger.Info(JsonConvert.SerializeObject(SceneManager.ActiveScene)));
-            }),
-        };
-        
-        CopperImGui.PreRendered += () =>
-        {
-            CopperImGui.MenuBar(true, MenuActions);
-        };
     }
 
     protected override void Draw()

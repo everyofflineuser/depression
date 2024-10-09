@@ -29,9 +29,11 @@ public class NetworkPanel : BaseWindow
             (ushort)_maxConnections));
         CopperImGui.Button("Start Client", () => NetworkManager.StartClient((ushort)_port));
         
+        if (!NetworkManager.IsActive()) return;
+        
         CopperImGui.Separator();
 
-        ImGuiNET.ImGui.InputTextMultiline("Message", ref _message, 99, new Vector2(100,100));
+        ImGuiNET.ImGui.InputTextMultiline("Message", ref _message, 99, new Vector2(250,50));
         CopperImGui.Button("Send Message", () => NetworkManager.SendMessage(_message));
     }
 }

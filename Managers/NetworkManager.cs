@@ -61,4 +61,7 @@ public static class NetworkManager
         CurrentServer?.Update();
         CurrentClient?.Update();
     }
+
+    public static bool IsActive() 
+        => CurrentServer != null || CurrentClient != null;
 }

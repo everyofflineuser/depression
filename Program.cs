@@ -18,7 +18,7 @@ public static class Program
         
         DiscordManager.Initialize();
         
-        using Game game = new Game(settings, "Editor");
+        using Game game = new Game(settings, "Depression");
         game.Run(new Scenes.Test());
     }
 }
