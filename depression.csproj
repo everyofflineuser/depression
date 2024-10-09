@@ -1,0 +1,106 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Remove=".gitignore" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="CopperDevs.DearImGui" Version="1.2.1" />
+        <PackageReference Include="CopperDevs.DearImGui.Renderer.Raylib" Version="1.1.2" />
+        <PackageReference Include="DiscordRichPresence" Version="1.2.1.24" />
+        <PackageReference Include="Box2D.NetStandard" Version="2.4.7-alpha" />
+        <PackageReference Include="Jitter2" Version="2.4.0" />
+        <PackageReference Include="LibNoise" Version="0.2.0" />
+        <PackageReference Include="NativeFileDialogNET" Version="2.0.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="OpenTK.Graphics" Version="5.0.0-pre.11" />
+        <PackageReference Include="Raylib-CSharp" Version="4.1.9" />
+        <PackageReference Include="RiptideNetworking.Riptide" Version="2.2.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="$(SPARKLE_LIB)/content/**/*">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="content/**/*">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Update="$(SPARKLE_LIB)/content/images/icon.png">
+            <Link>content/images/icon.png</Link>
+        </Content>
+        <Content Update="$(SPARKLE_LIB)/content/shaders/glsl330/filter/bloom.frag">
+            <Link>content/shaders/glsl330/filter/bloom.frag</Link>
+        </Content>
+        <Content Update="$(SPARKLE_LIB)/content/shaders/glsl330/filter/blur.frag">
+            <Link>content/shaders/glsl330/filter/blur.frag</Link>
+        </Content>
+        <Content Update="$(SPARKLE_LIB)/content/shaders/glsl330/filter/cross_hatching.frag">
+            <Link>content/shaders/glsl330/filter/cross_hatching.frag</Link>
+        </Content>
+        <Content Update="$(SPARKLE_LIB)/content/shaders/glsl330/filter/cross_stitching.frag">
+            <Link>content/shaders/glsl330/filter/cross_stitching.frag</Link>
+        </Content>
+        <Content Update="$(SPARKLE_LIB)/content/shaders/glsl330/filter/dream_vision.frag">
+            <Link>content/shaders/glsl330/filter/dream_vision.frag</Link>
+        </Content>
+        <Content Update="$(SPARKLE_LIB)/content/shaders/glsl330/filter/fish_eye.frag">
+            <Link>content/shaders/glsl330/filter/fish_eye.frag</Link>
+        </Content>
+        <Content Update="$(SPARKLE_LIB)/content/shaders/glsl330/filter/fxaa.frag">
+            <Link>content/shaders/glsl330/filter/fxaa.frag</Link>
+        </Content>
+        <Content Update="$(SPARKLE_LIB)/content/shaders/glsl330/filter/gray_scale.frag">
+            <Link>content/shaders/glsl330/filter/gray_scale.frag</Link>
+        </Content>
+        <Content Update="$(SPARKLE_LIB)/content/shaders/glsl330/filter/pixelizer.frag">
+            <Link>content/shaders/glsl330/filter/pixelizer.frag</Link>
+        </Content>
+        <Content Update="$(SPARKLE_LIB)/content/shaders/glsl330/filter/posterization.frag">
+            <Link>content/shaders/glsl330/filter/posterization.frag</Link>
+        </Content>
+        <Content Update="$(SPARKLE_LIB)/content/shaders/glsl330/filter/predator.frag">
+            <Link>content/shaders/glsl330/filter/predator.frag</Link>
+        </Content>
+        <Content Update="$(SPARKLE_LIB)/content/shaders/glsl330/filter/scan_lines.frag">
+            <Link>content/shaders/glsl330/filter/scan_lines.frag</Link>
+        </Content>
+        <Content Update="$(SPARKLE_LIB)/content/shaders/glsl330/filter/sobel.frag">
+            <Link>content/shaders/glsl330/filter/sobel.frag</Link>
+        </Content>
+        <Content Update="$(SPARKLE_LIB)/content/shaders/glsl330/discard_alpha.frag">
+            <Link>content/shaders/glsl330/discard_alpha.frag</Link>
+        </Content>
+        <Content Update="$(SPARKLE_LIB)/content/shaders/glsl330/pbr.frag">
+            <Link>content/shaders/glsl330/pbr.frag</Link>
+        </Content>
+        <Content Update="$(SPARKLE_LIB)/content/shaders/glsl330/pbr.vert">
+            <Link>content/shaders/glsl330/pbr.vert</Link>
+        </Content>
+        <Content Update="$(SPARKLE_LIB)/content/shaders/glsl330/skybox.frag">
+            <Link>content/shaders/glsl330/skybox.frag</Link>
+        </Content>
+        <Content Update="$(SPARKLE_LIB)/content/shaders/glsl330/skybox.vert">
+            <Link>content/shaders/glsl330/skybox.vert</Link>
+        </Content>
+        <Content Update="$(SPARKLE_LIB)/content/shaders/glsl430/pbr.frag">
+            <Link>content/shaders/glsl430/pbr.frag</Link>
+        </Content>
+        <Content Update="$(SPARKLE_LIB)/content/shaders/glsl430/pbr.vert">
+            <Link>content/shaders/glsl430/pbr.vert</Link>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="Sparkle">
+            <HintPath>$(SPARKLE_LIB)/Sparkle.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+</Project>
