@@ -14,7 +14,6 @@ public class NetworkPanel : BaseWindow
 {
     private int _port = 7777;
     private int _maxConnections = 10;
-    private string _message = string.Empty;
     
     public override void WindowUpdate()
     {
@@ -29,11 +28,11 @@ public class NetworkPanel : BaseWindow
             (ushort)_maxConnections));
         CopperImGui.Button("Start Client", () => NetworkManager.StartClient((ushort)_port));
         
-        if (!NetworkManager.IsActive()) return;
+        /*if (!NetworkManager.IsActive()) return;
         
         CopperImGui.Separator();
 
         ImGuiNET.ImGui.InputTextMultiline("Message", ref _message, 99, new Vector2(250,50));
-        CopperImGui.Button("Send Message", () => NetworkManager.SendMessage(_message));
+        CopperImGui.Button("Send Message", () => NetworkManager.SendMessage(_message));*/
     }
 }

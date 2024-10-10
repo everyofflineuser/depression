@@ -1,4 +1,7 @@
-﻿using Riptide;
+﻿using System.Numerics;
+using Riptide;
+using Sparkle.CSharp.Entities;
+using Sparkle.CSharp.Scenes;
 
 namespace Sparkle_Editor.Code.Managers;
 
@@ -17,15 +20,11 @@ public static class NetworkManager
         return server;
     }
 
-    public static Message SendMessage(string msg)
+    public static void SendMessage(Message msg)
     {
-        Message message = Message.Create(MessageSendMode.Reliable, 1);
-        message.AddString(msg);
-
-        CurrentServer?.SendToAll(message);
-        CurrentClient?.Send(message);
-
-        return message;
+        if (!IsActive()) return;
+        
+        CurrentClient?.Send(msg);
     }
     
     public static Client StartClient(ushort port)
@@ -38,22 +37,33 @@ public static class NetworkManager
         return client;
     }
     
-    [MessageHandler(1)]
+    [MessageHandler((ushort)MessageId.EntityUpdate)]
     private static void HandleServer(ushort fromClientId, Message message)
     {
-        string someString = message.GetString();
+        Vector3 position = message.GetVector3();
+        Quaternion rotation = message.GetQuaternion();
+        ushort entityId = message.GetUShort();
+        
     
         // 0 is server
-        CurrentServer?.SendToAll(Message.Create(MessageSendMode.Reliable, 1).AddString(someString).AddUShort(fromClientId));
+        CurrentServer?.SendToAll(Message.Create(MessageSendMode.Reliable, 1)
+            .AddVector3(position)
+            .AddQuaternion(rotation)
+            .AddUShort(entityId));
     }
     
-    [MessageHandler(1)]
+    [MessageHandler((ushort)MessageId.EntityUpdate)]
     private static void HandleClient(Message message)
     {
-        string someString = message.GetString();
-        ushort fromClientId = message.GetUShort();
-        
-        Console.WriteLine($"{fromClientId}: {someString}");
+        Vector3 position = message.GetVector3();
+        Quaternion rotation = message.GetQuaternion();
+        ushort entityId = message.GetUShort();
+
+        Entity networkedEntity = SceneManager.ActiveScene?.GetEntity(entityId)!;
+        networkedEntity.Position = position;
+        networkedEntity.Rotation = rotation;
+
+        Console.WriteLine($"Received Entity({entityId}) update, New position: {position.X} {position.Y} {position.Z}, New rotation: {rotation.X} {rotation.Y} {rotation.Z}");
     }
 
     public static void UpdateHandlers()
