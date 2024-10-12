@@ -17,16 +17,13 @@ public class Game : Sparkle.CSharp.Game
     private string _title;
     public Server Server;
 
-    public Game(GameSettings settings, string title = "Sparkle Game") : base(settings)
+    public Game(GameSettings settings) : base(settings)
     {
-        _title = title;
     }
 
     protected override void Init() 
     {
         base.Init();
-        
-        Window.SetTitle(_title);
         
         var myOverlay = new DearImGuiOverlay("DearImGui Overlay")
         {
@@ -46,22 +43,33 @@ public class Game : Sparkle.CSharp.Game
         }
         
         RiptideLogger.Initialize(s => Logger.Debug(s), s => Logger.Info(s), s => Logger.Warn(s), s => Logger.Error(s), false);
+        
+        //Subscribe to events
+        DiscordManager.Client.OnReady += (sender, e) =>
+        {
+            Logger.Info($"Received Ready from user {e.User.Username}");
+        };
+
+        DiscordManager.Client.OnPresenceUpdate += (sender, e) =>
+        {
+            Logger.Info($"Received Update! {e.Presence}");
+        };
     }
 
     protected override void Draw() 
     {
         base.Draw();
         
-        Window.SetTitle($"{_title} [FPS: {Time.GetFPS()}]");
+        Window.SetTitle($"{Settings.Title} [FPS: {Time.GetFPS()}]");
         
         NetworkManager.UpdateHandlers();
     }
 
 
-    protected override void OnClose()
+    protected override void Dispose(bool disposing)
     {
-        base.OnClose();
-
+        base.Dispose(disposing);
+        
         DiscordManager.Client.Dispose();
         NetworkManager.CurrentServer?.Stop();
         NetworkManager.CurrentClient?.Disconnect();
