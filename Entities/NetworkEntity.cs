@@ -1,29 +1,23 @@
 ﻿using System.Numerics;
-using CopperDevs.Core.Utility;
 using Raylib_CSharp.Interact;
 using Riptide;
 using Sparkle_Editor.Code.Managers;
 using Sparkle.CSharp.Entities;
-using Sparkle.CSharp.Entities.Components;
 
 namespace Sparkle_Editor.Code.Entities;
 
-public class Gizmos : Entity
+public abstract class NetworkEntity : Entity
 {
-    public Gizmos(Vector3 position) : base(position) { }
-    
-    protected override void Init()
+    protected NetworkEntity(Vector3 position) : base(position)
     {
-        base.Init();
-        
-        AddComponent(new ModelRenderer(ContentRegistry.Models["Gizmos"], Vector3.Zero));
+        NetworkManager.AddNetworkEntity(this);
     }
 
     protected override void Update()
     {
         base.Update();
-
-        if (Input.IsKeyPressed(KeyboardKey.B))
+        
+        if (Input.IsKeyPressed(KeyboardKey.C))
         {
             this.Position.X++;
             this.Position.Y++;
@@ -36,5 +30,12 @@ public class Gizmos : Entity
             
             NetworkManager.SendMessage(entityUpdate);
         }
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        base.Dispose(disposing);
+
+        NetworkManager.RemoveNetworkEntity(this);
     }
 }

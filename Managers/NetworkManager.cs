@@ -1,5 +1,7 @@
 ﻿using System.Numerics;
 using Riptide;
+using Riptide.Utils;
+using Sparkle_Editor.Code.Entities;
 using Sparkle.CSharp.Entities;
 using Sparkle.CSharp.Scenes;
 
@@ -9,6 +11,7 @@ public static class NetworkManager
 {
     public static Server? CurrentServer { get; private set; }
     public static Client? CurrentClient { get; private set; }
+    private static readonly List<NetworkEntity> NetworkEntities = new List<NetworkEntity>();
     
     public static Server StartServer(ushort port, ushort maxConnections)
     {
@@ -36,35 +39,6 @@ public static class NetworkManager
 
         return client;
     }
-    
-    [MessageHandler((ushort)MessageId.EntityUpdate)]
-    private static void HandleServer(ushort fromClientId, Message message)
-    {
-        Vector3 position = message.GetVector3();
-        Quaternion rotation = message.GetQuaternion();
-        ushort entityId = message.GetUShort();
-        
-    
-        // 0 is server
-        CurrentServer?.SendToAll(Message.Create(MessageSendMode.Reliable, 1)
-            .AddVector3(position)
-            .AddQuaternion(rotation)
-            .AddUShort(entityId));
-    }
-    
-    [MessageHandler((ushort)MessageId.EntityUpdate)]
-    private static void HandleClient(Message message)
-    {
-        Vector3 position = message.GetVector3();
-        Quaternion rotation = message.GetQuaternion();
-        ushort entityId = message.GetUShort();
-
-        Entity networkedEntity = SceneManager.ActiveScene?.GetEntity(entityId)!;
-        networkedEntity.Position = position;
-        networkedEntity.Rotation = rotation;
-
-        Console.WriteLine($"Received Entity({entityId}) update, New position: {position.X} {position.Y} {position.Z}, New rotation: {rotation.X} {rotation.Y} {rotation.Z}");
-    }
 
     public static void UpdateHandlers()
     {
@@ -74,4 +48,25 @@ public static class NetworkManager
 
     public static bool IsActive() 
         => CurrentServer != null || CurrentClient != null;
+
+    public static List<NetworkEntity> AddNetworkEntity(NetworkEntity entity)
+    {
+        NetworkEntities.Add(entity);
+        
+        return NetworkEntities;
+    }
+    
+    public static List<NetworkEntity> RemoveNetworkEntity(NetworkEntity entity)
+    {
+        NetworkEntities.Remove(entity);
+        
+        return NetworkEntities;
+    }
+
+    public static List<NetworkEntity> GetNetworkEntities() => NetworkEntities;
+
+    public static bool IsNetworkEntity(Entity entity)
+    {
+        return NetworkEntities.Contains(entity);
+    }
 }

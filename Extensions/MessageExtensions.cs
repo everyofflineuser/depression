@@ -3,7 +3,9 @@
 
     public enum MessageId : ushort
     {
-        EntityUpdate = 1
+        EntityCreate = 0,
+        EntityUpdate = 1,
+        Error = 999
     }
 
     public static class MessageExtensions
