@@ -15,7 +15,6 @@ namespace Sparkle_Editor.Code;
 public class Game : Sparkle.CSharp.Game
 {
     private string _title;
-    public Server Server;
 
     public Game(GameSettings settings) : base(settings)
     {
@@ -42,7 +41,10 @@ public class Game : Sparkle.CSharp.Game
             Logger.Warn("You are using a alpha branch! v" + Program.Version);
         }
         
-        RiptideLogger.Initialize(s => Logger.Debug(s), s => Logger.Info(s), s => Logger.Warn(s), s => Logger.Error(s), false);
+        RiptideLogger.Initialize(s => Logger.Debug(s), 
+            s => Logger.Info(s), 
+            s => Logger.Warn(s), 
+            s => Logger.Error(s), false);
         
         //Subscribe to events
         DiscordManager.Client.OnReady += (sender, e) =>

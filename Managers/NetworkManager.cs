@@ -2,6 +2,7 @@
 using Riptide;
 using Riptide.Utils;
 using Sparkle_Editor.Code.Entities;
+using Sparkle_Editor.Code.Network;
 using Sparkle.CSharp.Entities;
 using Sparkle.CSharp.Scenes;
 
@@ -11,7 +12,10 @@ public static class NetworkManager
 {
     public static Server? CurrentServer { get; private set; }
     public static Client? CurrentClient { get; private set; }
-    private static readonly List<NetworkEntity> NetworkEntities = new List<NetworkEntity>();
+
+    public static ushort CurrentPort = 7777;
+    
+    private static readonly List<NetworkEntity> NetworkEntities = new ();
     
     public static Server StartServer(ushort port, ushort maxConnections)
     {
@@ -22,6 +26,42 @@ public static class NetworkManager
 
         return server;
     }
+    
+    public static Client? StartClient()
+    {
+        Client client = new Client();
+
+        if (client.Connect($"127.0.0.1:{CurrentPort}"))
+        {
+            CurrentClient = client;
+
+            CurrentClient.Disconnected += ClientHandler.OnClientDisconnected;
+
+            return client;
+        }
+        else
+        {
+            RiptideLogger.Log(LogType.Error, "Failed to connect to the server.");
+            return null;
+        }
+    }
+    
+    public static void StopServer()
+    {
+        foreach (Connection clientConnection in CurrentServer!.Clients)
+        {
+            CurrentServer.DisconnectClient(clientConnection);
+        }
+        
+        CurrentServer.Stop();
+        CurrentServer = null;
+    }
+
+    public static void StopClient()
+    {
+        CurrentClient!.Disconnect();
+        CurrentClient = null;
+    }
 
     public static void SendMessage(Message msg)
     {
@@ -30,16 +70,6 @@ public static class NetworkManager
         CurrentClient?.Send(msg);
     }
     
-    public static Client StartClient(ushort port)
-    {
-        Client client = new Client();
-        client.Connect($"127.0.0.1:{port}");
-        
-        CurrentClient = client;
-
-        return client;
-    }
-
     public static void UpdateHandlers()
     {
         CurrentServer?.Update();

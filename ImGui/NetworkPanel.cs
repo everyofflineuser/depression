@@ -1,38 +1,52 @@
-﻿using System.Numerics;
-using CopperDevs.DearImGui;
+﻿using CopperDevs.DearImGui;
 using CopperDevs.DearImGui.Attributes;
 using CopperDevs.DearImGui.Rendering;
-using ImGuiNET;
 using Sparkle_Editor.Code.Managers;
-using Sparkle.CSharp.Logging;
-using Sparkle.CSharp.Scenes;
 
 namespace Sparkle_Editor.Code.ImGui;
 
 [Window("Network", WindowOpen = true)]
 public class NetworkPanel : BaseWindow
 {
-    private int _port = 7777;
+    private int _port = NetworkManager.CurrentPort;
     private int _maxConnections = 10;
     
     public override void WindowUpdate()
     {
         base.WindowUpdate();
 
-        if (_port > 0) _port = 7777;
-        if (_maxConnections > 0) _maxConnections = 10;
+        if (NetworkManager.CurrentPort <= 0) NetworkManager.CurrentPort = 7777;
+        if (_maxConnections <= 0) _maxConnections = 10;
+        
+        if (NetworkManager.CurrentPort != _port) NetworkManager.CurrentPort = (ushort)_port;
         
         ImGuiNET.ImGui.DragInt("Port", ref _port);
         ImGuiNET.ImGui.DragInt("Max Connections", ref _maxConnections);
-        CopperImGui.Button("Start Server", () => NetworkManager.StartServer((ushort)_port,
-            (ushort)_maxConnections));
-        CopperImGui.Button("Start Client", () => NetworkManager.StartClient((ushort)_port));
         
-        /*if (!NetworkManager.IsActive()) return;
-        
-        CopperImGui.Separator();
+        if (NetworkManager.CurrentServer == null)
+        {
+            CopperImGui.Button("Start Server", () => NetworkManager.StartServer((ushort)NetworkManager.CurrentPort,
+                (ushort)_maxConnections));
+        }
+        else
+        {
+            CopperImGui.Button("Stop Server", NetworkManager.StopServer);
+        }
 
-        ImGuiNET.ImGui.InputTextMultiline("Message", ref _message, 99, new Vector2(250,50));
-        CopperImGui.Button("Send Message", () => NetworkManager.SendMessage(_message));*/
+        if (NetworkManager.CurrentClient == null)
+        {
+            CopperImGui.Button("Start Client", () => NetworkManager.StartClient());
+        }
+        else
+        {
+            CopperImGui.Button("Stop Client", NetworkManager.StopClient);
+        }
+        
+        if (NetworkManager.CurrentServer == null) return;
+        
+        CopperImGui.Separator("Information about your server");
+
+        CopperImGui.Text(
+            $"Players on Server: {NetworkManager.CurrentServer?.ClientCount}/{NetworkManager.CurrentServer?.MaxClientCount}");
     }
 }
