@@ -1,0 +1,7 @@
+﻿language: csharp
+mono: none
+dotnet: 8.0
+script:
+  - dotnet restore
+  - dotnet build --no-restore
+  - dotnet test --no-build --verbosity normal
