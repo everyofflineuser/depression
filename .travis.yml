@@ -1,7 +1,0 @@
-﻿language: csharp
-mono: none
-dotnet: 8.0.10
-before_script:
-  - dotnet restore
-script:
-  - dotnet build ./depression -c Release -f net8.0
