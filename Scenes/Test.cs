@@ -1,14 +1,9 @@
 ﻿using System.Numerics;
-using Newtonsoft.Json;
-using Raylib_CSharp.Interact;
+using depression.Entities;
 using Raylib_CSharp.Rendering;
-using Sparkle_Editor.Code.Entities;
-using Sparkle_Editor.Code.Managers;
-using Sparkle.CSharp.Entities;
-using Sparkle.CSharp.Logging;
 using Sparkle.CSharp.Scenes;
 
-namespace Sparkle_Editor.Code.Scenes;
+namespace depression.Scenes;
 
 public class Test : Scene
 {

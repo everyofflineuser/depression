@@ -1,7 +1,7 @@
 ﻿using DiscordRPC;
 using DiscordRPC.Logging;
 
-namespace Sparkle_Editor.Code.Managers;
+namespace depression.Managers;
 
 public static class DiscordManager
 {

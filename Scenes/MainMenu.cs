@@ -1,11 +1,9 @@
 ﻿using System.Numerics;
-using CopperDevs.DearImGui;
-using Sparkle_Editor.Code.ImGui;
 using Sparkle.CSharp.Entities;
 using Sparkle.CSharp.Physics;
 using Sparkle.CSharp.Scenes;
 
-namespace Sparkle_Editor.Code.Scenes;
+namespace depression.Scenes;
 
 public class MainMenu : Scene
 {

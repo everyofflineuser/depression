@@ -1,10 +1,11 @@
 ﻿using System.Numerics;
+using depression.Extensions;
+using depression.Managers;
 using Raylib_CSharp.Interact;
 using Riptide;
-using Sparkle_Editor.Code.Managers;
 using Sparkle.CSharp.Entities;
 
-namespace Sparkle_Editor.Code.Entities;
+namespace depression.Entities;
 
 public abstract class NetworkEntity : Entity
 {

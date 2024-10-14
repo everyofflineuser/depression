@@ -1,12 +1,10 @@
-﻿using System.Numerics;
+﻿using depression.Entities;
+using depression.Network;
 using Riptide;
 using Riptide.Utils;
-using Sparkle_Editor.Code.Entities;
-using Sparkle_Editor.Code.Network;
 using Sparkle.CSharp.Entities;
-using Sparkle.CSharp.Scenes;
 
-namespace Sparkle_Editor.Code.Managers;
+namespace depression.Managers;
 
 public static class NetworkManager
 {

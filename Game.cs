@@ -1,35 +1,40 @@
-﻿using System.Diagnostics;
+﻿using CopperDevs.DearImGui;
+using CopperDevs.DearImGui.Renderer.Raylib;
+using CopperDevs.DearImGui.Renderer.Raylib.Bindings;
+using CopperDevs.DearImGui.Renderer.Raylib.Raylib_CSharp;
+using depression.Managers;
 using Raylib_CSharp;
 using Raylib_CSharp.Windowing;
-using Riptide;
 using Riptide.Utils;
-using Sparkle_Editor.Code.Managers;
-using Sparkle_Editor.Code.ImGui;
 using Sparkle.CSharp;
 using Sparkle.CSharp.Logging;
-using Sparkle.CSharp.Overlays;
+using SparkleLogger = Sparkle.CSharp.Logging.Logger;
 using Sparkle.CSharp.Registries;
 using Sparkle.CSharp.Scenes;
 
-namespace Sparkle_Editor.Code;
+namespace depression;
 
 public class Game : Sparkle.CSharp.Game
 {
     public Game(GameSettings settings) : base(settings)
     {
-    }
-
-    protected override void Init() 
-    {
-        base.Init();
-        
-        var myOverlay = new DearImGuiOverlay("DearImGui Overlay")
-        {
-            Enabled = true,
-        };
-        OverlayManager.Add(myOverlay);
+        SparkleLogger.Message += Utility.CustomLog;
     }
     
+    protected override void Init()
+    {
+        base.Init();
+
+        CopperImGui.Setup<RlImGuiRenderer<RlImGuiBinding>>(true, true);
+        CopperImGui.ShowDearImGuiAboutWindow = true;
+        CopperImGui.ShowDearImGuiDemoWindow = false;
+        CopperImGui.ShowDearImGuiMetricsWindow = false;
+        CopperImGui.ShowDearImGuiDebugLogWindow = false;
+        CopperImGui.ShowDearImGuiIdStackToolWindow = false;
+
+        Utility.SetWindowStyling();
+    }
+
     protected override void OnRun()
     {
         base.OnRun();
@@ -61,11 +66,19 @@ public class Game : Sparkle.CSharp.Game
     {
         base.Draw();
         
+        CopperImGui.Render();
+        
         Window.SetTitle($"{Settings.Title} | Scene: {(SceneManager.ActiveScene != null ? SceneManager.ActiveScene.Name : "???")} [FPS: {Time.GetFPS()}]");
         
         NetworkManager.UpdateHandlers();
     }
+    
+    protected override void OnClose()
+    {
+        base.OnClose();
 
+        CopperImGui.Shutdown();
+    }
 
     protected override void Dispose(bool disposing)
     {

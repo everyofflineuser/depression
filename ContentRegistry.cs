@@ -3,7 +3,7 @@ using Sparkle.CSharp.Content;
 using Sparkle.CSharp.Content.Types;
 using Sparkle.CSharp.Registries;
 
-namespace Sparkle_Editor.Code;
+namespace depression;
 
 public class ContentRegistry : Registry
 {

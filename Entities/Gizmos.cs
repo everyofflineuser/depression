@@ -1,12 +1,12 @@
 ﻿using System.Numerics;
-using CopperDevs.Core.Utility;
+using depression.Extensions;
+using depression.Managers;
 using Raylib_CSharp.Interact;
 using Riptide;
-using Sparkle_Editor.Code.Managers;
 using Sparkle.CSharp.Entities;
 using Sparkle.CSharp.Entities.Components;
 
-namespace Sparkle_Editor.Code.Entities;
+namespace depression.Entities;
 
 public class Gizmos : Entity
 {

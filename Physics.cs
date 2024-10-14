@@ -1,11 +1,10 @@
 ﻿using System.Numerics;
-using Raylib_CSharp.Camera.Cam3D;
 using Raylib_CSharp.Collision;
 using Raylib_CSharp.Interact;
 using Sparkle.CSharp.Entities;
 using Sparkle.CSharp.Scenes;
 
-namespace Sparkle_Editor.Code;
+namespace depression;
 
 public static class Physics
 {

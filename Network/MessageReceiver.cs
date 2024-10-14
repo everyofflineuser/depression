@@ -1,14 +1,13 @@
 ﻿using System.Numerics;
+using depression.Entities;
+using depression.Extensions;
+using depression.Managers;
 using Riptide;
 using Riptide.Utils;
-using Sparkle_Editor.Code.Entities;
-using Sparkle_Editor.Code.Managers;
-using Sparkle.CSharp.Entities;
-using Sparkle.CSharp.Logging;
 using Sparkle.CSharp.Scenes;
 using LogType = Riptide.Utils.LogType;
 
-namespace Sparkle_Editor.Code.Network;
+namespace depression.Network;
 
 public static class MessageReceiver
 {

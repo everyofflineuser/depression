@@ -3,7 +3,7 @@ using Raylib_CSharp.Camera.Cam3D;
 using Raylib_CSharp.Interact;
 using Sparkle.CSharp.Entities;
 
-namespace Sparkle_Editor.Code.Entities;
+namespace depression.Entities;
 
 public class EditorCam : Cam3D
 {

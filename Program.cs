@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
-using Sparkle_Editor.Code.Managers;
+using depression.Managers;
 using Sparkle.CSharp;
 
-namespace Sparkle_Editor.Code;
+namespace depression;
 
 public static class Program
 {

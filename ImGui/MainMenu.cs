@@ -1,14 +1,24 @@
-﻿using CopperDevs.DearImGui.Attributes;
+﻿using CopperDevs.DearImGui;
+using CopperDevs.DearImGui.Attributes;
 using CopperDevs.DearImGui.Rendering;
 
-namespace Sparkle_Editor.Code.ImGui;
+namespace depression.ImGui;
 
 [Window("Main Menu", WindowOpen = true)]
 public class MainMenu : BaseWindow
 {
-    public override void WindowStart()
+    private MenuState _state = 0;
+
+    public override void WindowUpdate()
     {
-        base.WindowStart();
+        base.WindowUpdate();
+        
         
     }
+}
+
+internal enum MenuState
+{
+    Normal = 0,
+    Multiplayer = 1
 }

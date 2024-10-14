@@ -1,10 +1,9 @@
 ﻿using CopperDevs.DearImGui;
 using CopperDevs.DearImGui.Attributes;
 using CopperDevs.DearImGui.Rendering;
-using Sparkle_Editor.Code.Managers;
-using Sparkle.CSharp.Scenes;
+using depression.Managers;
 
-namespace Sparkle_Editor.Code.ImGui;
+namespace depression.ImGui;
 
 [Window("Network", WindowOpen = false)]
 public class NetworkPanel : BaseWindow

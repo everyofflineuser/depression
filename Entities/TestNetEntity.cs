@@ -3,7 +3,7 @@ using Raylib_CSharp.Interact;
 using Sparkle.CSharp.Entities.Components;
 using Sparkle.CSharp.Logging;
 
-namespace Sparkle_Editor.Code.Entities;
+namespace depression.Entities;
 
 public class TestNetEntity : NetworkEntity
 {

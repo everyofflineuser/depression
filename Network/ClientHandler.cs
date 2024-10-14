@@ -1,8 +1,8 @@
-﻿using Riptide;
+﻿using depression.Managers;
+using Riptide;
 using Riptide.Utils;
-using Sparkle_Editor.Code.Managers;
 
-namespace Sparkle_Editor.Code.Network;
+namespace depression.Network;
 
 public static class ClientHandler
 {

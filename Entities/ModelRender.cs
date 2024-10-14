@@ -3,7 +3,7 @@ using Raylib_CSharp.Geometry;
 using Sparkle.CSharp.Entities;
 using Sparkle.CSharp.Entities.Components;
 
-namespace Sparkle_Editor.Code.Entities;
+namespace depression.Entities;
 
 public class ModelRender : Entity
 {

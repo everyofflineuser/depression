@@ -12,8 +12,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="CopperDevs.DearImGui" Version="1.2.1" />
-        <PackageReference Include="CopperDevs.DearImGui.Renderer.Raylib" Version="1.1.2" />
+        <PackageReference Include="CopperDevs.DearImGui" Version="1.2.6" />
+        <PackageReference Include="CopperDevs.DearImGui.Renderer.Raylib" Version="2.0.0" />
+        <PackageReference Include="CopperDevs.DearImGui.Renderer.Raylib.Raylib-CSharp" Version="1.0.0" />
         <PackageReference Include="DiscordRichPresence" Version="1.2.1.24" />
         <PackageReference Include="Box2D.NetStandard" Version="2.4.7-alpha" />
         <PackageReference Include="Jitter2" Version="2.4.0" />
