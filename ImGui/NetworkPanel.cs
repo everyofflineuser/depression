@@ -2,10 +2,11 @@
 using CopperDevs.DearImGui.Attributes;
 using CopperDevs.DearImGui.Rendering;
 using Sparkle_Editor.Code.Managers;
+using Sparkle.CSharp.Scenes;
 
 namespace Sparkle_Editor.Code.ImGui;
 
-[Window("Network", WindowOpen = true)]
+[Window("Network", WindowOpen = false)]
 public class NetworkPanel : BaseWindow
 {
     private int _port = NetworkManager.CurrentPort;
@@ -13,8 +14,6 @@ public class NetworkPanel : BaseWindow
     
     public override void WindowUpdate()
     {
-        base.WindowUpdate();
-
         if (NetworkManager.CurrentPort <= 0) NetworkManager.CurrentPort = 7777;
         if (_maxConnections <= 0) _maxConnections = 10;
         

@@ -9,13 +9,12 @@ using Sparkle.CSharp;
 using Sparkle.CSharp.Logging;
 using Sparkle.CSharp.Overlays;
 using Sparkle.CSharp.Registries;
+using Sparkle.CSharp.Scenes;
 
 namespace Sparkle_Editor.Code;
 
 public class Game : Sparkle.CSharp.Game
 {
-    private string _title;
-
     public Game(GameSettings settings) : base(settings)
     {
     }
@@ -62,7 +61,7 @@ public class Game : Sparkle.CSharp.Game
     {
         base.Draw();
         
-        Window.SetTitle($"{Settings.Title} [FPS: {Time.GetFPS()}]");
+        Window.SetTitle($"{Settings.Title} | Scene: {(SceneManager.ActiveScene != null ? SceneManager.ActiveScene.Name : "???")} [FPS: {Time.GetFPS()}]");
         
         NetworkManager.UpdateHandlers();
     }

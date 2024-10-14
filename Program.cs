@@ -19,6 +19,6 @@ public static class Program
         DiscordManager.Initialize();
         
         using Game game = new Game(settings);
-        game.Run(new Scenes.Test());
+        game.Run(new Scenes.MainMenu());
     }
 }
