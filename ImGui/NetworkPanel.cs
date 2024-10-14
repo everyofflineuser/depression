@@ -2,6 +2,7 @@
 using CopperDevs.DearImGui.Attributes;
 using CopperDevs.DearImGui.Rendering;
 using depression.Managers;
+using Sparkle.CSharp.Scenes;
 
 namespace depression.ImGui;
 
@@ -13,6 +14,12 @@ public class NetworkPanel : BaseWindow
     
     public override void WindowUpdate()
     {
+        if (SceneManager.ActiveScene?.Name != "Test")
+        {
+            CopperImGui.HideWindow<NetworkPanel>();
+            return;
+        }
+        
         if (NetworkManager.CurrentPort <= 0) NetworkManager.CurrentPort = 7777;
         if (_maxConnections <= 0) _maxConnections = 10;
         
@@ -23,7 +30,7 @@ public class NetworkPanel : BaseWindow
         
         if (NetworkManager.CurrentServer == null)
         {
-            CopperImGui.Button("Start Server", () => NetworkManager.StartServer((ushort)NetworkManager.CurrentPort,
+            CopperImGui.Button("Start Server", () => NetworkManager.StartServer(NetworkManager.CurrentPort,
                 (ushort)_maxConnections));
         }
         else

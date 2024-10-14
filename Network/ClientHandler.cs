@@ -1,4 +1,5 @@
-﻿using depression.Managers;
+﻿using CopperDevs.Logger;
+using depression.Managers;
 using Riptide;
 using Riptide.Utils;
 
@@ -10,7 +11,7 @@ public static class ClientHandler
     {
         if (e.Reason == DisconnectReason.Kicked)
         {
-            RiptideLogger.Log(LogType.Info, "Maybe server is closed, retrying connection...");
+            RiptideLogger.Log(LogType.Info, "(CLIENT): Maybe server is closed, retrying connection...");
 
             Client? client = NetworkManager.StartClient();
 
@@ -22,14 +23,14 @@ public static class ClientHandler
                 {
                     if (client is { IsConnecting: false, IsConnected: true })
                     {
-                        Console.WriteLine($"Successfully reconnected to 127.0.0.1:{NetworkManager.CurrentPort}!");
+                        Log.Network($"(CLIENT): Successfully reconnected to 127.0.0.1:{NetworkManager.CurrentPort}!");
                         return;
                     }
 
                     if (client is { IsConnecting: false, IsNotConnected: true })
                     {
                         NetworkManager.StopClient();
-                        Console.WriteLine("Server is closed, Bye!!");
+                        Log.Network("(CLIENT): Server is closed, Bye!!");
                         return;
                     }
                 }

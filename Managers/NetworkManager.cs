@@ -1,8 +1,10 @@
 ﻿using depression.Entities;
 using depression.Network;
+using depression.Scenes;
 using Riptide;
 using Riptide.Utils;
 using Sparkle.CSharp.Entities;
+using Sparkle.CSharp.Scenes;
 
 namespace depression.Managers;
 
@@ -22,6 +24,8 @@ public static class NetworkManager
         
         CurrentServer = server;
 
+        SceneManager.SetScene(new Test());
+        
         return server;
     }
     
@@ -34,6 +38,8 @@ public static class NetworkManager
             CurrentClient = client;
 
             CurrentClient.Disconnected += ClientHandler.OnClientDisconnected;
+            
+            SceneManager.SetScene(new Test());
 
             return client;
         }

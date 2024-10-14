@@ -1,5 +1,7 @@
 ﻿using System.Numerics;
+using CopperDevs.DearImGui;
 using depression.Entities;
+using depression.ImGui;
 using Raylib_CSharp.Rendering;
 using Sparkle.CSharp.Scenes;
 
@@ -12,6 +14,8 @@ public class Test : Scene
     protected override void Init() 
     {
         base.Init();
+        
+        CopperImGui.ShowWindow<NetworkPanel>();
         
         EditorCam cam3D = new(new Vector3(10, 10, 10), Vector3.Zero, Vector3.UnitY);
         cam3D.MouseSensitivity = 1f;

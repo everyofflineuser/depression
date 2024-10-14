@@ -2,6 +2,8 @@
 using CopperDevs.DearImGui.Renderer.Raylib;
 using CopperDevs.DearImGui.Renderer.Raylib.Bindings;
 using CopperDevs.DearImGui.Renderer.Raylib.Raylib_CSharp;
+using CopperDevs.Logger;
+using depression.ImGui;
 using depression.Managers;
 using Raylib_CSharp;
 using Raylib_CSharp.Windowing;
@@ -25,14 +27,16 @@ public class Game : Sparkle.CSharp.Game
     {
         base.Init();
 
-        CopperImGui.Setup<RlImGuiRenderer<RlImGuiBinding>>(true, true);
+        CopperImGui.Setup<RlImGuiRenderer<RlImGuiBinding>>(true, false);
         CopperImGui.ShowDearImGuiAboutWindow = true;
         CopperImGui.ShowDearImGuiDemoWindow = false;
         CopperImGui.ShowDearImGuiMetricsWindow = false;
-        CopperImGui.ShowDearImGuiDebugLogWindow = false;
+        CopperImGui.ShowDearImGuiDebugLogWindow = false; 
         CopperImGui.ShowDearImGuiIdStackToolWindow = false;
 
         Utility.SetWindowStyling();
+        
+        CopperImGui.ShowWindow<MainMenu>();
     }
 
     protected override void OnRun()
@@ -46,7 +50,7 @@ public class Game : Sparkle.CSharp.Game
         }
         
         RiptideLogger.Initialize(s => Logger.Debug(s), 
-            s => Logger.Info(s), 
+            s => Log.Network(s), 
             s => Logger.Warn(s), 
             s => Logger.Error(s), false);
         
