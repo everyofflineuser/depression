@@ -1,4 +1,6 @@
-﻿using CopperDevs.DearImGui;
+﻿using System.Numerics;
+using CopperDevs.Core.Utility;
+using CopperDevs.DearImGui;
 using CopperDevs.DearImGui.Attributes;
 using CopperDevs.DearImGui.Backend.Enums;
 using CopperDevs.DearImGui.Rendering;
@@ -7,7 +9,7 @@ using Sparkle.CSharp.Scenes;
 
 namespace depression.ImGui;
 
-[Window("Main Menu", WindowOpen = true, Flags = WindowFlags.NoMove | WindowFlags.NoResize | WindowFlags.AlwaysAutoResize)]
+[Window("Main Menu", WindowOpen = true, Flags = WindowFlags.NoCollapse | WindowFlags.NoScrollbar | WindowFlags.NoResize | WindowFlags.NoTitleBar | WindowFlags.NoMove)]
 public class MainMenu : BaseWindow
 {
     private MenuState _state = 0;
@@ -20,6 +22,9 @@ public class MainMenu : BaseWindow
             CopperImGui.HideWindow<MainMenu>();
             return;
         }
+        
+        ImGuiNET.ImGui.SetWindowPos(Vector2.Zero.WithY(18));
+        ImGuiNET.ImGui.SetWindowSize(ImGuiNET.ImGui.GetIO().DisplaySize.WithY(ImGuiNET.ImGui.GetIO().DisplaySize.Y - 18));
 
         switch (_state)
         {
