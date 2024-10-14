@@ -14,7 +14,7 @@ public class NetworkPanel : BaseWindow
     
     public override void WindowUpdate()
     {
-        if (SceneManager.ActiveScene?.Name != "Test")
+        if (SceneManager.ActiveScene?.Name != "Test" /*|| NetworkManager.CurrentNetworkMode == NetworkModes.Singleplayer*/)
         {
             CopperImGui.HideWindow<NetworkPanel>();
             return;

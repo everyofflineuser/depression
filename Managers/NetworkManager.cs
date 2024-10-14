@@ -1,4 +1,5 @@
-﻿using depression.Entities;
+﻿using CopperDevs.Logger;
+using depression.Entities;
 using depression.Network;
 using depression.Scenes;
 using Riptide;
@@ -13,12 +14,19 @@ public static class NetworkManager
     public static Server? CurrentServer { get; private set; }
     public static Client? CurrentClient { get; private set; }
 
-    public static ushort CurrentPort = 7777;
+    public static ushort CurrentPort { get; set; } = 7777;
+    public static NetworkModes CurrentNetworkMode { get; set; } = NetworkModes.Multiplayer;
     
     private static readonly List<NetworkEntity> NetworkEntities = new ();
     
-    public static Server StartServer(ushort port, ushort maxConnections)
+    public static Server? StartServer(ushort port, ushort maxConnections)
     {
+        if (CurrentNetworkMode == NetworkModes.Singleplayer)
+        {
+            Log.Warning("Sorry, but you are in a singleplayer mode.");
+            return null;
+        }        
+        
         Server server = new Server();
         server.Start(port, maxConnections);
         
@@ -31,6 +39,12 @@ public static class NetworkManager
     
     public static Client? StartClient()
     {
+        if (CurrentNetworkMode == NetworkModes.Singleplayer)
+        {
+            Log.Warning("Sorry, but you are in a singleplayer mode.");
+            return null;
+        } 
+        
         Client client = new Client();
 
         if (client.Connect($"127.0.0.1:{CurrentPort}"))
@@ -103,4 +117,10 @@ public static class NetworkManager
     {
         return NetworkEntities.Contains(entity);
     }
+}
+
+public enum NetworkModes
+{
+    Singleplayer,
+    Multiplayer,
 }

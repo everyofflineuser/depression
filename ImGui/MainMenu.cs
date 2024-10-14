@@ -36,37 +36,45 @@ public class MainMenu : BaseWindow
                 return;
         }
         
-        CopperImGui.Button("Play Single-player", PlaySinglePlayer);
-        CopperImGui.Button("Play Multi-player", () => _state = MenuState.Multiplayer);
+        CopperImGui.Space(5 * (ImGuiNET.ImGui.GetIO().DisplaySize.Y / 15));
+        
+        CopperImGui.Button("Play Single-player", ImGuiNET.ImGui.GetIO().DisplaySize.X - 18, 48, PlaySinglePlayer);
+        CopperImGui.Button("Play Multi-player", ImGuiNET.ImGui.GetIO().DisplaySize.X - 18, 48, () => _state = MenuState.Multiplayer);
     }
 
     private void PlaySinglePlayer()
     {
+        NetworkManager.CurrentNetworkMode = NetworkModes.Singleplayer;
+        
         SceneManager.SetScene(new Scenes.Test());
         CopperImGui.HideWindow<MainMenu>();
     }
     
     private void Multiplayer()
     {
-        if (NetworkManager.CurrentPort <= 0) NetworkManager.CurrentPort = 7777;
+        if (_port <= 0) _port = 7777;
         
         if (NetworkManager.CurrentPort != _port) NetworkManager.CurrentPort = (ushort)_port;
         
-        ImGuiNET.ImGui.DragInt("Port", ref _port);
+        CopperImGui.Button("<= Back", ImGuiNET.ImGui.GetIO().DisplaySize.X / 10, 24, () => _state = MenuState.Normal);
+
+        NetworkManager.CurrentNetworkMode = NetworkModes.Multiplayer;
         
-        CopperImGui.Button("Start Server", () => NetworkManager.StartServer(NetworkManager.CurrentPort,
+        CopperImGui.Space(5 * (ImGuiNET.ImGui.GetIO().DisplaySize.Y / 15));
+        
+        CopperImGui.DragValue("Port", ref _port);
+        
+        CopperImGui.Button("Start Server", ImGuiNET.ImGui.GetIO().DisplaySize.X / 1.5f, 48, () => NetworkManager.StartServer(NetworkManager.CurrentPort,
             10));
 
-        CopperImGui.Button("Start Client", () => NetworkManager.StartClient());
+        CopperImGui.Button("Start Client", ImGuiNET.ImGui.GetIO().DisplaySize.X / 1.5f, 48, () => NetworkManager.StartClient());
         
-        CopperImGui.Button("Start Host", () =>
+        CopperImGui.Button("Start Host", ImGuiNET.ImGui.GetIO().DisplaySize.X / 1.5f, 48, () =>
         {
             NetworkManager.StartServer(NetworkManager.CurrentPort,
                 10);
             NetworkManager.StartClient();
         });
-        
-        CopperImGui.Button("Back to Main Menu", () => _state = MenuState.Normal);
     }
 }
 
