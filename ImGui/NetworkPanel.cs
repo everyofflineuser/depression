@@ -9,6 +9,7 @@ namespace depression.ImGui;
 [Window("Network", WindowOpen = false)]
 public class NetworkPanel : BaseWindow
 {
+    private string _ip = NetworkManager.CurrentIP;
     private int _port = NetworkManager.CurrentPort;
     private int _maxConnections = 10;
     
@@ -24,9 +25,11 @@ public class NetworkPanel : BaseWindow
         if (_maxConnections <= 0) _maxConnections = 10;
         
         if (NetworkManager.CurrentPort != _port) NetworkManager.CurrentPort = (ushort)_port;
+        if (NetworkManager.CurrentIP != _ip) NetworkManager.CurrentIP = _ip;
         
-        ImGuiNET.ImGui.DragInt("Port", ref _port);
-        ImGuiNET.ImGui.DragInt("Max Connections", ref _maxConnections);
+        CopperImGui.Text("IP", ref _ip);
+        CopperImGui.DragValue("Port", ref _port);
+        CopperImGui.DragValue("Max Connections", ref _maxConnections);
         
         if (NetworkManager.CurrentServer == null)
         {

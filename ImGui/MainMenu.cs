@@ -13,7 +13,8 @@ namespace depression.ImGui;
 public class MainMenu : BaseWindow
 {
     private MenuState _state = 0;
-    private int _port = 7777;
+    private int _port = NetworkManager.CurrentPort;
+    private string _ip = NetworkManager.CurrentIP;
 
     public override void WindowUpdate()
     {
@@ -55,6 +56,7 @@ public class MainMenu : BaseWindow
         if (_port <= 0) _port = 7777;
         
         if (NetworkManager.CurrentPort != _port) NetworkManager.CurrentPort = (ushort)_port;
+        if (NetworkManager.CurrentIP != _ip) NetworkManager.CurrentIP = _ip;
         
         CopperImGui.Button("<= Back", ImGuiNET.ImGui.GetIO().DisplaySize.X / 10, 24, () => _state = MenuState.Normal);
 
@@ -62,6 +64,7 @@ public class MainMenu : BaseWindow
         
         CopperImGui.Space(5 * (ImGuiNET.ImGui.GetIO().DisplaySize.Y / 15));
         
+        CopperImGui.Text("IP", ref _ip);
         CopperImGui.DragValue("Port", ref _port);
         
         CopperImGui.Button("Start Server", ImGuiNET.ImGui.GetIO().DisplaySize.X / 1.5f, 48, () => NetworkManager.StartServer(NetworkManager.CurrentPort,

@@ -14,6 +14,7 @@ public static class NetworkManager
     public static Server? CurrentServer { get; private set; }
     public static Client? CurrentClient { get; private set; }
 
+    public static string CurrentIP { get; set; } = "localhost";
     public static ushort CurrentPort { get; set; } = 7777;
     public static NetworkModes CurrentNetworkMode { get; set; } = NetworkModes.Multiplayer;
     
@@ -47,7 +48,7 @@ public static class NetworkManager
         
         Client client = new Client();
 
-        if (client.Connect($"127.0.0.1:{CurrentPort}"))
+        if (client.Connect($"{CurrentIP}:{CurrentPort}"))
         {
             CurrentClient = client;
 
