@@ -25,6 +25,7 @@ public class NetworkPanel : BaseWindow
         if (_maxConnections <= 0) _maxConnections = 10;
         
         if (NetworkManager.CurrentPort != _port) NetworkManager.CurrentPort = (ushort)_port;
+        if (NetworkManager.MaxPlayers != _maxConnections) NetworkManager.MaxPlayers = (ushort)_maxConnections;
         if (NetworkManager.CurrentIP != _ip) NetworkManager.CurrentIP = _ip;
         
         CopperImGui.Text("IP", ref _ip);
@@ -33,8 +34,7 @@ public class NetworkPanel : BaseWindow
         
         if (NetworkManager.CurrentServer == null)
         {
-            CopperImGui.Button("Start Server", () => NetworkManager.StartServer(NetworkManager.CurrentPort,
-                (ushort)_maxConnections));
+            CopperImGui.Button("Start Server", () => NetworkManager.StartServer());
         }
         else
         {

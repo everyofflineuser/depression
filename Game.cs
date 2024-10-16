@@ -3,8 +3,8 @@ using CopperDevs.DearImGui.Renderer.Raylib;
 using CopperDevs.DearImGui.Renderer.Raylib.Bindings;
 using CopperDevs.DearImGui.Renderer.Raylib.Raylib_CSharp;
 using CopperDevs.Logger;
-using depression.ImGui;
 using depression.Managers;
+using depression.Scenes;
 using Raylib_CSharp;
 using Raylib_CSharp.Windowing;
 using Riptide.Utils;
@@ -13,20 +13,34 @@ using Sparkle.CSharp.Logging;
 using SparkleLogger = Sparkle.CSharp.Logging.Logger;
 using Sparkle.CSharp.Registries;
 using Sparkle.CSharp.Scenes;
+using MainMenu = depression.ImGui.MainMenu;
 
 namespace depression;
 
 public class Game : Sparkle.CSharp.Game
 {
-    public Game(GameSettings settings) : base(settings)
+    private bool _isServer;
+    
+    public Game(GameSettings settings, bool isServer = false) : base(settings)
     {
         SparkleLogger.Message += Utility.CustomLog;
+        this._isServer = isServer;
     }
     
     protected override void Init()
     {
         base.Init();
 
+        if (_isServer)
+        {
+            SceneManager.SetScene(new Test(true));
+            NetworkManager.StartServer();
+        }
+        else
+        {
+            SceneManager.SetScene(new Scenes.MainMenu());
+        }
+        
         CopperImGui.Setup<RlImGuiRenderer<RlImGuiBinding>>(true, false);
         CopperImGui.ShowDearImGuiAboutWindow = true;
         CopperImGui.ShowDearImGuiDemoWindow = false;
@@ -46,15 +60,17 @@ public class Game : Sparkle.CSharp.Game
 
         if (Program.Version.Major <= 1)
         {
-            Logger.Warn("You are using a alpha branch! v" + Program.Version);
+            Log.Warning("You are using a alpha branch! v" + Program.Version);
         }
         
-        RiptideLogger.Initialize(s => Logger.Debug(s), 
-            s => Log.Network(s), 
-            s => Logger.Warn(s), 
-            s => Logger.Error(s), false);
+        if (_isServer) Log.UserAction("You are running the game in server mode!");
         
-        //Subscribe to events
+        RiptideLogger.Initialize(s => Log.Debug(s), 
+            s => Log.Network(s), 
+            s => Log.Warning(s), 
+            s => Log.Error(s), false);
+        
+        if (_isServer) return;
         DiscordManager.Client.OnReady += (sender, e) =>
         {
             Logger.Info($"Received Ready from user {e.User.Username}");
@@ -70,17 +86,20 @@ public class Game : Sparkle.CSharp.Game
     {
         base.Draw();
         
+        NetworkManager.UpdateHandlers();
+        
+        if (_isServer) return;
         CopperImGui.Render();
         
         Window.SetTitle($"{Settings.Title} | Scene: {(SceneManager.ActiveScene != null ? SceneManager.ActiveScene.Name : "???")} [FPS: {Time.GetFPS()}]");
-        
-        NetworkManager.UpdateHandlers();
     }
     
     protected override void OnClose()
     {
         base.OnClose();
 
+        if (_isServer) return;
+        
         CopperImGui.Shutdown();
     }
 
@@ -88,9 +107,9 @@ public class Game : Sparkle.CSharp.Game
     {
         base.Dispose(disposing);
         
-        DiscordManager.Client.Dispose();
         NetworkManager.CurrentServer?.Stop();
         NetworkManager.CurrentClient?.Disconnect();
+        if (!_isServer) DiscordManager.Client.Dispose();
         Environment.Exit(0);
     }
 }

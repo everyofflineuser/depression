@@ -9,13 +9,15 @@ namespace depression.Scenes;
 
 public class Test : Scene
 {
-    public Test() : base("Test", SceneType.Scene3D) { }
+    private bool _isServer = false;
+    
+    public Test(bool isServer = false) : base("Test", SceneType.Scene3D) {_isServer = isServer;}
     
     protected override void Init() 
     {
         base.Init();
         
-        CopperImGui.ShowWindow<NetworkPanel>();
+        if (!_isServer) CopperImGui.ShowWindow<NetworkPanel>();
         
         EditorCam cam3D = new(new Vector3(10, 10, 10), Vector3.Zero, Vector3.UnitY);
         cam3D.MouseSensitivity = 1f;

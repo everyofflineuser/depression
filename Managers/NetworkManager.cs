@@ -16,11 +16,12 @@ public static class NetworkManager
 
     public static string CurrentIP { get; set; } = "localhost";
     public static ushort CurrentPort { get; set; } = 7777;
+    public static ushort MaxPlayers { get; set; } = 10;
     public static NetworkModes CurrentNetworkMode { get; set; } = NetworkModes.Multiplayer;
     
     private static readonly List<NetworkEntity> NetworkEntities = new ();
     
-    public static Server? StartServer(ushort port, ushort maxConnections)
+    public static Server? StartServer()
     {
         if (CurrentNetworkMode == NetworkModes.Singleplayer)
         {
@@ -29,11 +30,9 @@ public static class NetworkManager
         }        
         
         Server server = new Server();
-        server.Start(port, maxConnections);
+        server.Start(CurrentPort, MaxPlayers);
         
         CurrentServer = server;
-
-        SceneManager.SetScene(new Test());
         
         return server;
     }
@@ -48,7 +47,7 @@ public static class NetworkManager
         
         Client client = new Client();
 
-        if (client.Connect($"{CurrentIP}:{CurrentPort}"))
+        if (client.Connect($"{(CurrentIP == "localhost" ? "127.0.0.1" : CurrentIP)}:{CurrentPort}"))
         {
             CurrentClient = client;
 
