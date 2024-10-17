@@ -1,7 +1,10 @@
 ﻿using CopperDevs.Logger;
+using depression.Extensions;
 using depression.Managers;
 using Riptide;
+using Riptide.Transports;
 using Riptide.Utils;
+using DisconnectedEventArgs = Riptide.DisconnectedEventArgs;
 
 namespace depression.Network;
 
@@ -38,5 +41,15 @@ public static class ClientHandler
             
             checkingThread.Start();
         }
+    }
+
+    public static void OnClientConnected(object? sender, EventArgs e)
+    {
+        if (NetworkManager.CurrentServer != null) return;
+        
+        Client clientSender = (sender as Client)!;
+
+        Message syncRequest = Message.Create(MessageSendMode.Reliable, MessageId.Sync);
+        NetworkManager.CurrentClient?.Send(syncRequest);
     }
 }

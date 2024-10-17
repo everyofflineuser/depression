@@ -7,6 +7,7 @@ public enum MessageId : ushort
 {
     EntityCreate = 0,
     EntityUpdate = 1,
+    Sync = 2,
     Error = 999
 }
 

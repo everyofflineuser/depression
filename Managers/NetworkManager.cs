@@ -1,4 +1,5 @@
-﻿using CopperDevs.Logger;
+﻿using System.Numerics;
+using CopperDevs.Logger;
 using depression.Entities;
 using depression.Network;
 using depression.Scenes;
@@ -51,6 +52,7 @@ public static class NetworkManager
         {
             CurrentClient = client;
 
+            CurrentClient.Connected += ClientHandler.OnClientConnected;
             CurrentClient.Disconnected += ClientHandler.OnClientDisconnected;
             
             SceneManager.SetScene(new Test());
@@ -86,6 +88,28 @@ public static class NetworkManager
         if (!IsActive()) return;
         
         CurrentClient?.Send(msg);
+    }
+
+    public static Entity? UpdateEntity(ushort entityId, Vector3 position, Vector3 scale, Quaternion rotation)
+    {
+        if (SceneManager.ActiveScene == null ||
+            SceneManager.ActiveScene.GetEntity(entityId) == null ||
+            !IsActive())
+        {
+            return null;
+        }
+        
+        Entity tempEntity = SceneManager.ActiveScene!.GetEntity(entityId);
+        tempEntity.Position = position;
+        tempEntity.Rotation = rotation;
+        tempEntity.Scale = scale;
+        
+        Log.Network($"Received NetworkEntity({entityId}) update" +
+                          $"\nNew position: {position.X} {position.Y} {position.Z}" +
+                          $"\nNew rotation: {rotation.X} {rotation.Y} {rotation.Z}" +
+                          $"\nNew Scale: {scale.X} {scale.Y} {scale.Z}");
+        
+        return tempEntity;
     }
     
     public static void UpdateHandlers()

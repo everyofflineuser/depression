@@ -29,12 +29,29 @@ public static class MessageReceiver
             return;
         }
     
+        NetworkManager.UpdateEntity(entityId, position, scale, rotation);
+        
         // 0 is server
         NetworkManager.CurrentServer?.SendToAll(Message.Create(MessageSendMode.Reliable, 1)
             .AddVector3(position)
             .AddVector3(scale)
             .AddQuaternion(rotation)
             .AddUShort(entityId));
+    }
+    
+    [MessageHandler((ushort)MessageId.Sync)]
+    private static void SyncRequestServer(ushort fromClientId, Message message)
+    {
+        foreach (NetworkEntity entity in NetworkManager.GetNetworkEntities())
+        {
+            Message entityUpdate = Message.Create(MessageSendMode.Reliable, MessageId.EntityUpdate)
+                .AddVector3(entity.Position)
+                .AddVector3(entity.Scale)
+                .AddQuaternion(entity.Rotation)
+                .AddUShort((ushort)entity.Id);
+            
+            NetworkManager.CurrentServer!.Send(entityUpdate, fromClientId);
+        }
     }
     
     [MessageHandler((ushort)MessageId.EntityUpdate)]
@@ -45,15 +62,7 @@ public static class MessageReceiver
         Quaternion rotation = message.GetQuaternion();
         ushort entityId = message.GetUShort();
 
-        Entity networkedEntity = SceneManager.ActiveScene!.GetEntity(entityId);
-        networkedEntity.Position = position;
-        networkedEntity.Rotation = rotation;
-        networkedEntity.Scale = scale;
-
-        Console.WriteLine($"Received NetworkEntity({entityId}) update" +
-                          $"\nNew position: {position.X} {position.Y} {position.Z}" +
-                          $"\nNew rotation: {rotation.X} {rotation.Y} {rotation.Z}" +
-                          $"\nNew Scale: {scale.X} {scale.Y} {scale.Z}");
+        NetworkManager.UpdateEntity(entityId, position, scale, rotation);
     }
 
     [MessageHandler((ushort)MessageId.Error)]
