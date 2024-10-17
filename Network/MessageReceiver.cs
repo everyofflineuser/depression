@@ -4,6 +4,7 @@ using depression.Extensions;
 using depression.Managers;
 using Riptide;
 using Riptide.Utils;
+using Sparkle.CSharp.Entities;
 using Sparkle.CSharp.Scenes;
 using LogType = Riptide.Utils.LogType;
 
@@ -15,6 +16,7 @@ public static class MessageReceiver
     private static void EntityUpdateServer(ushort fromClientId, Message message)
     {
         Vector3 position = message.GetVector3();
+        Vector3 scale = message.GetVector3();
         Quaternion rotation = message.GetQuaternion();
         ushort entityId = message.GetUShort();
 
@@ -30,6 +32,7 @@ public static class MessageReceiver
         // 0 is server
         NetworkManager.CurrentServer?.SendToAll(Message.Create(MessageSendMode.Reliable, 1)
             .AddVector3(position)
+            .AddVector3(scale)
             .AddQuaternion(rotation)
             .AddUShort(entityId));
     }
@@ -38,14 +41,19 @@ public static class MessageReceiver
     private static void EntityUpdateClient(Message message)
     {
         Vector3 position = message.GetVector3();
+        Vector3 scale = message.GetVector3();
         Quaternion rotation = message.GetQuaternion();
         ushort entityId = message.GetUShort();
 
-        NetworkEntity networkedEntity = (SceneManager.ActiveScene?.GetEntity(entityId)! as NetworkEntity)!;
+        Entity networkedEntity = SceneManager.ActiveScene!.GetEntity(entityId);
         networkedEntity.Position = position;
         networkedEntity.Rotation = rotation;
+        networkedEntity.Scale = scale;
 
-        Console.WriteLine($"Received NetworkEntity({entityId}) update, New position: {position.X} {position.Y} {position.Z}, New rotation: {rotation.X} {rotation.Y} {rotation.Z}");
+        Console.WriteLine($"Received NetworkEntity({entityId}) update" +
+                          $"\nNew position: {position.X} {position.Y} {position.Z}" +
+                          $"\nNew rotation: {rotation.X} {rotation.Y} {rotation.Z}" +
+                          $"\nNew Scale: {scale.X} {scale.Y} {scale.Z}");
     }
 
     [MessageHandler((ushort)MessageId.Error)]

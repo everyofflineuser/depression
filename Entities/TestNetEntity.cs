@@ -26,5 +26,19 @@ public class TestNetEntity : NetworkEntity
         {
             Logger.Info($"TestNetEntity: {Position}");
         }
+        
+        if (Input.IsKeyPressed(KeyboardKey.C))
+        {
+            this.Position.X++;
+            this.Position.Y++;
+            this.Position.Z++;
+        }
+        
+        if (Input.IsKeyPressed(KeyboardKey.F))
+        {
+            this.Scale.X++;
+            this.Scale.Y++;
+            this.Scale.Z++;
+        }
     }
 }
