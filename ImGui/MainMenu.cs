@@ -5,8 +5,6 @@ using CopperDevs.DearImGui.Attributes;
 using CopperDevs.DearImGui.Backend.Enums;
 using CopperDevs.DearImGui.Rendering;
 using depression.Managers;
-using depression.Scenes;
-using Sparkle.CSharp.Scenes;
 
 namespace depression.ImGui;
 
@@ -20,12 +18,6 @@ public class MainMenu : BaseWindow
 
     public override void WindowUpdate()
     {
-        if (SceneManager.ActiveScene?.Name != "Main Menu")
-        {
-            CopperImGui.HideWindow<MainMenu>();
-            return;
-        }
-        
         ImGuiNET.ImGui.SetWindowPos(Vector2.Zero.WithY(18));
         ImGuiNET.ImGui.SetWindowSize(ImGuiNET.ImGui.GetIO().DisplaySize.WithY(ImGuiNET.ImGui.GetIO().DisplaySize.Y - 18));
 
@@ -41,16 +33,9 @@ public class MainMenu : BaseWindow
         
         CopperImGui.Space(5 * (ImGuiNET.ImGui.GetIO().DisplaySize.Y / 15));
         
-        CopperImGui.Button("Play Single-player", ImGuiNET.ImGui.GetIO().DisplaySize.X - 18, 48, PlaySinglePlayer);
         CopperImGui.Button("Play Multi-player", ImGuiNET.ImGui.GetIO().DisplaySize.X - 18, 48, () => _state = MenuState.Multiplayer);
-    }
+        CopperImGui.Button("Quit", ImGuiNET.ImGui.GetIO().DisplaySize.X - 18, 48, () => Game.Instance.Dispose());
 
-    private void PlaySinglePlayer()
-    {
-        NetworkManager.CurrentNetworkMode = NetworkModes.Singleplayer;
-        
-        SceneManager.SetScene(new Scenes.Test());
-        CopperImGui.HideWindow<MainMenu>();
     }
     
     private void Multiplayer()
@@ -63,8 +48,7 @@ public class MainMenu : BaseWindow
         if (NetworkManager.MaxPlayers != _maxPlayers) NetworkManager.CurrentIP = _ip;
         
         CopperImGui.Button("<= Back", ImGuiNET.ImGui.GetIO().DisplaySize.X / 10, 24, () => _state = MenuState.Normal);
-
-        NetworkManager.CurrentNetworkMode = NetworkModes.Multiplayer;
+        
         
         CopperImGui.Space(5 * (ImGuiNET.ImGui.GetIO().DisplaySize.Y / 15));
         
@@ -76,7 +60,6 @@ public class MainMenu : BaseWindow
             48, () =>
             {
                 NetworkManager.StartServer();
-                SceneManager.SetScene(new Test());
             });
 
         CopperImGui.Button("Start Client", 
@@ -84,14 +67,12 @@ public class MainMenu : BaseWindow
             48, () =>
             {
                 NetworkManager.StartClient();
-                SceneManager.SetScene(new Test());
             });
         
         CopperImGui.Button("Start Host", ImGuiNET.ImGui.GetIO().DisplaySize.X / 1.5f, 48, () =>
         {
             NetworkManager.StartServer();
             NetworkManager.StartClient();
-            SceneManager.SetScene(new Test());
         });
     }
 }

@@ -4,9 +4,7 @@ using depression.Extensions;
 using depression.Managers;
 using Riptide;
 using Riptide.Utils;
-using Sparkle.CSharp.Entities;
 using Sparkle.CSharp.Scenes;
-using LogType = Riptide.Utils.LogType;
 
 namespace depression.Network;
 

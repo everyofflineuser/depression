@@ -1,7 +1,5 @@
 ﻿using System.Numerics;
-using CopperDevs.DearImGui;
 using depression.Entities;
-using depression.ImGui;
 using Raylib_CSharp.Rendering;
 using Sparkle.CSharp.Scenes;
 
@@ -16,13 +14,14 @@ public class Test : Scene
     protected override void Init() 
     {
         base.Init();
+
+        if (!_isServer)
+        {
+            EditorCam cam3D = new(new Vector3(10, 10, 10), Vector3.Zero, Vector3.UnitY);
+            cam3D.MouseSensitivity = 1f;
         
-        if (!_isServer) CopperImGui.ShowWindow<NetworkPanel>();
-        
-        EditorCam cam3D = new(new Vector3(10, 10, 10), Vector3.Zero, Vector3.UnitY);
-        cam3D.MouseSensitivity = 1f;
-        
-        AddEntity(cam3D);
+            AddEntity(cam3D);
+        }
         
         //for test
         AddEntity(new ModelRender(new Vector3(0f,0f,0f), ContentRegistry.Models["Cube"]));
@@ -37,22 +36,13 @@ public class Test : Scene
     protected override void Draw() 
     {
         base.Draw();
+
+        if (_isServer) return;
         
         SceneManager.ActiveCam3D!.BeginMode3D();
         
         Graphics.DrawGrid(100, 1);
         
         SceneManager.ActiveCam3D.EndMode3D();
-    }
-
-    protected override void Update()
-    {
-        base.Update();
-
-        /*if (Input.IsMouseButtonReleased(MouseButton.Left) && Physics.Raycast(out Entity hit))
-        {
-            SelectingManager.SelectedEntity = hit;
-            Logger.Info($"Entity ID: {hit.Id}");
-        }*/
     }
 }

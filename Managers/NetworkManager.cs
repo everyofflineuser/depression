@@ -18,17 +18,17 @@ public static class NetworkManager
     public static string CurrentIP { get; set; } = "localhost";
     public static ushort CurrentPort { get; set; } = 7777;
     public static ushort MaxPlayers { get; set; } = 10;
-    public static NetworkModes CurrentNetworkMode { get; set; } = NetworkModes.Multiplayer;
     
     private static readonly List<NetworkEntity> NetworkEntities = new ();
     
     public static Server? StartServer()
     {
-        if (CurrentNetworkMode == NetworkModes.Singleplayer)
+        if (MaxPlayers == 0)
         {
-            Log.Warning("Sorry, but you are in a singleplayer mode.");
-            return null;
-        }        
+            if (MaxPlayers > 0) MaxPlayers = 0;
+            
+            Log.Warning("Max players is set to zero!");
+        }
         
         Server server = new Server();
         server.Start(CurrentPort, MaxPlayers);
@@ -40,12 +40,6 @@ public static class NetworkManager
     
     public static Client? StartClient()
     {
-        if (CurrentNetworkMode == NetworkModes.Singleplayer)
-        {
-            Log.Warning("Sorry, but you are in a singleplayer mode.");
-            return null;
-        } 
-        
         Client client = new Client();
 
         if (client.Connect($"{(CurrentIP == "localhost" ? "127.0.0.1" : CurrentIP)}:{CurrentPort}"))
@@ -54,6 +48,7 @@ public static class NetworkManager
 
             CurrentClient.Connected += ClientHandler.OnClientConnected;
             CurrentClient.Disconnected += ClientHandler.OnClientDisconnected;
+            CurrentClient.ConnectionFailed += ClientHandler.OnConnectionFailed;
             
             SceneManager.SetScene(new Test());
 
@@ -85,7 +80,8 @@ public static class NetworkManager
 
     public static void SendMessage(Message msg)
     {
-        if (!IsActive()) return;
+        if (CurrentClient == null &&
+            CurrentServer == null) return;
         
         CurrentClient?.Send(msg);
     }
@@ -94,7 +90,8 @@ public static class NetworkManager
     {
         if (SceneManager.ActiveScene == null ||
             SceneManager.ActiveScene.GetEntity(entityId) == null ||
-            !IsActive())
+            CurrentClient == null &&
+            CurrentServer == null)
         {
             return null;
         }
@@ -118,9 +115,6 @@ public static class NetworkManager
         CurrentClient?.Update();
     }
 
-    public static bool IsActive() 
-        => CurrentServer != null || CurrentClient != null;
-
     public static List<NetworkEntity> AddNetworkEntity(NetworkEntity entity)
     {
         NetworkEntities.Add(entity);
@@ -141,10 +135,4 @@ public static class NetworkManager
     {
         return NetworkEntities.Contains(entity);
     }
-}
-
-public enum NetworkModes
-{
-    Singleplayer,
-    Multiplayer,
 }

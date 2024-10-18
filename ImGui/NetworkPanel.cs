@@ -1,12 +1,13 @@
 ﻿using CopperDevs.DearImGui;
 using CopperDevs.DearImGui.Attributes;
+using CopperDevs.DearImGui.Backend.Enums;
 using CopperDevs.DearImGui.Rendering;
 using depression.Managers;
 using Sparkle.CSharp.Scenes;
 
 namespace depression.ImGui;
 
-[Window("Network", WindowOpen = false)]
+[Window("Network", WindowOpen = false, Flags = WindowFlags.NoCollapse | WindowFlags.NoScrollbar)]
 public class NetworkPanel : BaseWindow
 {
     private string _ip = NetworkManager.CurrentIP;

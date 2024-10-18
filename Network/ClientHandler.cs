@@ -1,8 +1,6 @@
-﻿using CopperDevs.Logger;
-using depression.Extensions;
+﻿using depression.Extensions;
 using depression.Managers;
 using Riptide;
-using Riptide.Transports;
 using Riptide.Utils;
 using DisconnectedEventArgs = Riptide.DisconnectedEventArgs;
 
@@ -14,9 +12,9 @@ public static class ClientHandler
     {
         if (e.Reason == DisconnectReason.Kicked)
         {
-            RiptideLogger.Log(LogType.Info, "(CLIENT): Maybe server is closed, retrying connection...");
+            RiptideLogger.Log(LogType.Info, "(CLIENT): Maybe server is closed");
 
-            Client? client = NetworkManager.StartClient();
+            /*Client? client = NetworkManager.StartClient();
 
             if (client == null) return;
 
@@ -39,15 +37,22 @@ public static class ClientHandler
                 }
             });
             
-            checkingThread.Start();
+            checkingThread.Start();*/
         }
+        
+        NetworkManager.StopClient();
+    }
+
+    public static void OnConnectionFailed(object? sender, ConnectionFailedEventArgs e)
+    {
+        NetworkManager.StopClient();
     }
 
     public static void OnClientConnected(object? sender, EventArgs e)
     {
         if (NetworkManager.CurrentServer != null) return;
         
-        Client clientSender = (sender as Client)!;
+        //Client clientSender = (sender as Client)!;
 
         Message syncRequest = Message.Create(MessageSendMode.Reliable, MessageId.Sync);
         NetworkManager.CurrentClient?.Send(syncRequest);

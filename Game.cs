@@ -1,8 +1,8 @@
 ﻿using CopperDevs.DearImGui;
 using CopperDevs.DearImGui.Renderer.Raylib;
-using CopperDevs.DearImGui.Renderer.Raylib.Bindings;
 using CopperDevs.DearImGui.Renderer.Raylib.Raylib_CSharp;
 using CopperDevs.Logger;
+using depression.ImGui;
 using depression.Managers;
 using depression.Scenes;
 using Raylib_CSharp;
@@ -13,7 +13,6 @@ using Sparkle.CSharp.Logging;
 using SparkleLogger = Sparkle.CSharp.Logging.Logger;
 using Sparkle.CSharp.Registries;
 using Sparkle.CSharp.Scenes;
-using MainMenu = depression.ImGui.MainMenu;
 
 namespace depression;
 
@@ -30,19 +29,9 @@ public class Game : Sparkle.CSharp.Game
     protected override void Init()
     {
         base.Init();
-
-        if (_isServer)
-        {
-            SceneManager.SetScene(new Test(true));
-            NetworkManager.StartServer();
-        }
-        else
-        {
-            SceneManager.SetScene(new Scenes.MainMenu());
-        }
         
         CopperImGui.Setup<RlImGuiRenderer<RlImGuiBinding>>(true, false);
-        CopperImGui.ShowDearImGuiAboutWindow = true;
+        CopperImGui.ShowDearImGuiAboutWindow = false;
         CopperImGui.ShowDearImGuiDemoWindow = false;
         CopperImGui.ShowDearImGuiMetricsWindow = false;
         CopperImGui.ShowDearImGuiDebugLogWindow = false; 
@@ -50,7 +39,15 @@ public class Game : Sparkle.CSharp.Game
 
         Utility.SetWindowStyling();
         
-        CopperImGui.ShowWindow<MainMenu>();
+        if (_isServer)
+        {
+            SceneManager.SetScene(new Test(true));
+            NetworkManager.StartServer();
+        }
+        else
+        {
+            SceneManager.SetScene(new Empty());
+        }
     }
 
     protected override void OnRun()
@@ -69,6 +66,7 @@ public class Game : Sparkle.CSharp.Game
             s => Log.Network(s), 
             s => Log.Warning(s), 
             s => Log.Error(s), false);
+        
         
         if (_isServer) return;
         DiscordManager.Client.OnReady += (sender, e) =>
@@ -93,7 +91,38 @@ public class Game : Sparkle.CSharp.Game
         
         Window.SetTitle($"{Settings.Title} | Scene: {(SceneManager.ActiveScene != null ? SceneManager.ActiveScene.Name : "???")} [FPS: {Time.GetFPS()}]");
     }
-    
+
+    protected override void FixedUpdate()
+    {
+        base.FixedUpdate();
+
+        if (NetworkManager.CurrentClient != null ||
+            NetworkManager.CurrentServer != null)
+        {
+            if (SceneManager.ActiveScene?.Name == "Test")
+            {
+                CopperImGui.ShowWindow<NetworkPanel>();
+                CopperImGui.HideWindow<MainMenu>();
+            }
+            else
+            {
+                SceneManager.SetScene(new Test());
+            }
+        }
+        else
+        {
+            if (SceneManager.ActiveScene?.Name == "Empty")
+            {
+                CopperImGui.ShowWindow<MainMenu>();
+                CopperImGui.HideWindow<NetworkPanel>();
+            }
+            else
+            {
+                SceneManager.SetScene(new Empty());
+            }
+        }
+    }
+
     protected override void OnClose()
     {
         base.OnClose();
