@@ -7,21 +7,16 @@ namespace depression.Scenes;
 
 public class Test : Scene
 {
-    private bool _isServer = false;
-    
-    public Test(bool isServer = false) : base("Test", SceneType.Scene3D) {_isServer = isServer;}
+    public Test() : base("Test", SceneType.Scene3D) {}
     
     protected override void Init() 
     {
         base.Init();
 
-        if (!_isServer)
-        {
-            EditorCam cam3D = new(new Vector3(10, 10, 10), Vector3.Zero, Vector3.UnitY);
-            cam3D.MouseSensitivity = 1f;
+        EditorCam cam3D = new(new Vector3(10, 10, 10), Vector3.Zero, Vector3.UnitY);
+        cam3D.MouseSensitivity = 1f;
         
-            AddEntity(cam3D);
-        }
+        AddEntity(cam3D);
         
         //for test
         AddEntity(new ModelRender(new Vector3(0f,0f,0f), ContentRegistry.Models["Cube"]));
@@ -36,8 +31,6 @@ public class Test : Scene
     protected override void Draw() 
     {
         base.Draw();
-
-        if (_isServer) return;
         
         SceneManager.ActiveCam3D!.BeginMode3D();
         

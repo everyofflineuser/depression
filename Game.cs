@@ -18,12 +18,9 @@ namespace depression;
 
 public class Game : Sparkle.CSharp.Game
 {
-    private bool _isServer;
-    
     public Game(GameSettings settings, bool isServer = false) : base(settings)
     {
         SparkleLogger.Message += Utility.CustomLog;
-        this._isServer = isServer;
     }
     
     protected override void Init()
@@ -39,15 +36,7 @@ public class Game : Sparkle.CSharp.Game
 
         Utility.SetWindowStyling();
         
-        if (_isServer)
-        {
-            SceneManager.SetScene(new Test(true));
-            NetworkManager.StartServer();
-        }
-        else
-        {
-            SceneManager.SetScene(new Empty());
-        }
+        SceneManager.SetScene(new Empty());
     }
 
     protected override void OnRun()
@@ -60,15 +49,11 @@ public class Game : Sparkle.CSharp.Game
             Log.Warning("You are using a alpha branch! v" + Program.Version);
         }
         
-        if (_isServer) Log.UserAction("You are running the game in server mode!");
-        
         RiptideLogger.Initialize(s => Log.Debug(s), 
             s => Log.Network(s), 
             s => Log.Warning(s), 
             s => Log.Error(s), false);
         
-        
-        if (_isServer) return;
         DiscordManager.Client.OnReady += (sender, e) =>
         {
             Logger.Info($"Received Ready from user {e.User.Username}");
@@ -86,7 +71,6 @@ public class Game : Sparkle.CSharp.Game
         
         NetworkManager.UpdateHandlers();
         
-        if (_isServer) return;
         CopperImGui.Render();
         
         Window.SetTitle($"{Settings.Title} | Scene: {(SceneManager.ActiveScene != null ? SceneManager.ActiveScene.Name : "???")} [FPS: {Time.GetFPS()}]");
@@ -126,8 +110,6 @@ public class Game : Sparkle.CSharp.Game
     protected override void OnClose()
     {
         base.OnClose();
-
-        if (_isServer) return;
         
         CopperImGui.Shutdown();
     }
@@ -138,7 +120,7 @@ public class Game : Sparkle.CSharp.Game
         
         NetworkManager.CurrentServer?.Stop();
         NetworkManager.CurrentClient?.Disconnect();
-        if (!_isServer) DiscordManager.Client.Dispose();
+        DiscordManager.Client.Dispose();
         Environment.Exit(0);
     }
 }
