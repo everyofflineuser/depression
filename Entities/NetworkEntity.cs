@@ -13,6 +13,8 @@ public abstract class NetworkEntity : Entity
     private Vector3 LastSyncedScale;
     private Quaternion LastSyncedRotation;
     
+    public bool InitSynced = false;
+    
     protected NetworkEntity(Vector3 position) : base(position)
     {
         NetworkManager.AddNetworkEntity(this);
@@ -24,6 +26,8 @@ public abstract class NetworkEntity : Entity
     protected override void Update()
     {
         base.Update();
+
+        if (!InitSynced) return;
 
         if (LastSyncedPosition != Position ||
             LastSyncedScale != Scale ||
