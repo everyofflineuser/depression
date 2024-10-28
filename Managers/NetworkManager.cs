@@ -75,7 +75,6 @@ public static class NetworkManager
     public static void StopClient()
     {
         CurrentClient!.Disconnect();
-        
         CurrentClient = null;
     }
 
