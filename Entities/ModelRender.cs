@@ -5,7 +5,7 @@ using Sparkle.CSharp.Entities.Components;
 
 namespace depression.Entities;
 
-public class ModelRender : Entity
+public class ModelRender : NetworkEntity
 {
     private Model _model;
 

@@ -1,4 +1,6 @@
-﻿using depression.Extensions;
+﻿using System.Numerics;
+using depression.Entities;
+using depression.Extensions;
 using depression.Managers;
 using Riptide;
 using Riptide.Utils;
@@ -6,7 +8,7 @@ using DisconnectedEventArgs = Riptide.DisconnectedEventArgs;
 
 namespace depression.Network;
 
-public static class ClientHandler
+public class ClientHandler
 {
     public static void OnClientDisconnected(object? sender, DisconnectedEventArgs e)
     {
@@ -50,9 +52,19 @@ public static class ClientHandler
 
     public static void OnClientConnected(object? sender, EventArgs e)
     {
-        if (NetworkManager.CurrentServer != null) return;
+        if (NetworkManager.CurrentServer != null || NetworkManager.CurrentClient == null) return;
         
         //Client clientSender = (sender as Client)!;
+
+        try
+        {
+            Player.Spawn(NetworkManager.CurrentClient.Id, Environment.UserName, Vector3.Zero, true);
+        }
+        catch (Exception exception)
+        {
+            NetworkManager.StopClient();
+            RiptideLogger.Log(LogType.Error, exception.ToString());
+        }
 
         Message syncRequest = Message.Create(MessageSendMode.Reliable, MessageId.Sync);
         NetworkManager.CurrentClient?.Send(syncRequest);

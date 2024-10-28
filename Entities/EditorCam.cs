@@ -10,10 +10,12 @@ public class EditorCam : Cam3D
     public EditorCam(Vector3 position, Vector3 target, Vector3 up, float fov = 90, CameraProjection projection = CameraProjection.Perspective, CameraMode mode = CameraMode.Free)
         : base(position, target, up, fov, projection, mode) { }
 
+    private Entity model;
+
     protected override void Update()
     {
         base.Update();
-
+        
         if (Mode != CameraMode.Free && Input.IsMouseButtonDown(MouseButton.Right))
         {
             Mode = CameraMode.Free;

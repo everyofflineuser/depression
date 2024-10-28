@@ -86,6 +86,7 @@ public class Game : Sparkle.CSharp.Game
             if (SceneManager.ActiveScene?.Name == "Test")
             {
                 CopperImGui.ShowWindow<NetworkPanel>();
+                CopperImGui.ShowWindow<EntityList>();
                 CopperImGui.HideWindow<MainMenu>();
             }
             else
@@ -99,6 +100,7 @@ public class Game : Sparkle.CSharp.Game
             {
                 CopperImGui.ShowWindow<MainMenu>();
                 CopperImGui.HideWindow<NetworkPanel>();
+                CopperImGui.HideWindow<EntityList>();
             }
             else
             {
