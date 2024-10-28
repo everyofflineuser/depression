@@ -10,6 +10,10 @@ public class TestNetEntity : NetworkEntity
     public TestNetEntity(Vector3 position) : base(position)
     {
     }
+    
+    public TestNetEntity() : base(Vector3.Zero)
+    {
+    }
 
     protected override void Init()
     {

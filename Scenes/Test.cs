@@ -1,5 +1,7 @@
 ﻿using System.Numerics;
 using depression.Entities;
+using depression.Extensions;
+using Raylib_CSharp.Interact;
 using Raylib_CSharp.Rendering;
 using Sparkle.CSharp.Scenes;
 
@@ -24,7 +26,7 @@ public class Test : Scene
         AddEntity(new ModelRender(new Vector3(4f,0f,0f), ContentRegistry.Models["Sphere"]));
         AddEntity(new ModelRender(new Vector3(6f,0f,0f), ContentRegistry.Models["Plane"]));
         AddEntity(new ModelRender(new Vector3(8f,0f,0f), ContentRegistry.Models["Cylinder"]));
-        AddEntity(new TestNetEntity(new Vector3(8f,0f,0f)));
+        //AddEntity(new TestNetEntity(new Vector3(8f,0f,0f)));
         AddEntity(new Gizmos(new Vector3(-8f,0f,0f)));
     }
     
@@ -37,5 +39,13 @@ public class Test : Scene
         Graphics.DrawGrid(100, 1);
         
         SceneManager.ActiveCam3D.EndMode3D();
+        
+        //xd, delete button create entity
+        if (Input.IsKeyPressed(KeyboardKey.Delete))
+        {
+            NetworkEntity netEntity = new TestNetEntity(new Vector3(10f,0f,0f));
+            
+            this.AddNetworkEntity(netEntity);
+        }
     }
 }
